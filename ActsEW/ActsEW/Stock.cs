@@ -288,7 +288,7 @@ namespace ActsEW
             lockResource = false;
             SetResourceFlow();
         }
-        [KSPAction("Enable Resource")]
+        [KSPAction("Lock Resource")]
         public void DisableResource(KSPActionParam param)
         {
             lockResource = true;
@@ -300,13 +300,13 @@ namespace ActsEW
             lockEC = !lockEC;
             SetResourceFlow();
         }
-        [KSPAction("Enable Electricity")]
+        [KSPAction("Allow Electricity")]
         public void EnableElec(KSPActionParam param)
         {
             lockEC = false;
             SetResourceFlow();
         }
-        [KSPAction("Disable Electricity")]
+        [KSPAction("Lock Electricity")]
         public void DisableElec(KSPActionParam param)
         {
             lockEC = true;
@@ -386,7 +386,7 @@ namespace ActsEW
         //}
         public void SetResourceFlow()
         {
-            print("Check " + showEC + showRes);    
+            //print("Check " + showEC + showRes);    
             foreach (PartResource pr in this.part.Resources)
                 {
                     if(pr.resourceName != "ElectricCharge")
