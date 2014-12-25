@@ -10,13 +10,13 @@
 //    {
 //        public void Update()
 //        {
-//            foreach (Part p in FlightGlobals.ActiveVessel.parts)
+//            VesselAutopilotUI UIlist = FindObjectOfType<VesselAutopilotUI>();
+//            for(int i = 0;i < UIlist.modeButtons.Count();i++)
 //            {
-//                foreach (PartModule pm in p.Modules)
-//                {
-//                    print(pm.moduleName);
-//                }
+
+//                print(UIlist.modeButtons.ElementAt<RUIToggleButton>(i).name);
 //            }
+
 //        }
 //    }
 //}

@@ -43,6 +43,129 @@ namespace ActsEW
         {
             this.part.vessel.SetReferenceTransform(this.part);
         }
+        [KSPAction("RCS On")]
+        public void RCSOn(KSPActionParam param)
+        {
+            this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.RCS, true);
+        }
+        [KSPAction("RCS Off")]
+        public void RCSOff(KSPActionParam param)
+        {
+            this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.RCS, false);
+        }
+        [KSPAction("SAS Off")]
+        public void SASOff(KSPActionParam param)
+        {
+            this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, false);
+        }
+        [KSPAction("SAS Steady")]
+        public void SASSteady(KSPActionParam param)
+        {
+            if(this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.StabilityAssist))
+            {
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.StabilityAssist);
+                setSASUI(0);
+            }
+        }
+        [KSPAction("SAS +Pro")]
+        public void SASPrograde(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.Prograde))
+            {
+                //this.part.vessel.Autopilot.Enable(VesselAutopilot.AutopilotMode.Prograde);
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.Prograde);
+                setSASUI(1);
+            }
+        }
+        [KSPAction("SAS -Pro")]
+        public void SASRetrograde(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.Retrograde))
+            {
+                //this.part.vessel.Autopilot.Enable(VesselAutopilot.AutopilotMode.Retrograde);
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.Retrograde);
+                setSASUI(2);
+            }
+        }
+        [KSPAction("SAS +Norm")]
+        public void SASNormal(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.Normal))
+            {
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.Normal);
+                setSASUI(3);
+            }
+        }
+        [KSPAction("SAS -Norm")]
+        public void SASAntinormal(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.Antinormal))
+            {
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.Antinormal);
+                setSASUI(4);
+            }
+        }
+        [KSPAction("SAS +Rad")]
+        public void SASRadialIn(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.RadialIn))
+            {
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.RadialIn);
+                setSASUI(5);
+            }
+        }
+        [KSPAction("SAS -Rad")]
+        public void SASRadialOut(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.RadialOut))
+            {
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.RadialOut);
+                setSASUI(6);
+            }
+        }
+        [KSPAction("SAS Maneuver")]
+        public void SASManeuver(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.Maneuver))
+            {
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.Maneuver);
+                setSASUI(9);
+            }
+        }
+        [KSPAction("SAS Target")]
+        public void SASTarget(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.Target))
+            {
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.Target);
+                setSASUI(7);
+            }
+        }
+        [KSPAction("SAS -Target")]
+        public void SASAntitarget(KSPActionParam param)
+        {
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.AntiTarget))
+            {
+                this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
+                this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.AntiTarget);
+                setSASUI(8);
+            }
+        }
+        public void setSASUI(int mode)
+        {
+            RUIToggleButton[] SASbtns = FindObjectOfType<VesselAutopilotUI>().modeButtons;
+            SASbtns.ElementAt<RUIToggleButton>(mode).SetTrue(true, true);
+        }
+
     }
     public class ModuleControlSurfaceActions : PartModule
     {
