@@ -38,6 +38,86 @@ namespace ActsEW
     }
     public class ModuleCommandActions : PartModule
     {
+        //[KSPAction("maxEng")]
+        //public void maxEng(KSPActionParam param)
+        //{
+        //    foreach (Part p in FlightGlobals.ActiveVessel.parts)
+        //    {
+        //        foreach(ModuleEngines eng in p.Modules.OfType<ModuleEngines>())
+        //        {
+        //            print("max eng");
+        //            eng.manuallyOverridden = true;
+        //            eng.currentThrottle = .99f;
+        //            eng.requestedThrottle = .99f;
+        //        }
+        //    }
+        //}
+        //[KSPAction("minEng")]
+        //public void minEng(KSPActionParam param)
+        //{
+        //    foreach (Part p in FlightGlobals.ActiveVessel.parts)
+        //    {
+        //        foreach (ModuleEngines eng in p.Modules.OfType<ModuleEngines>())
+        //        {
+        //            print("min eng");
+        //            eng.manuallyOverridden = true;
+        //            eng.currentThrottle = 0f;
+        //            eng.requestedThrottle = 0f;
+        //        }
+        //    }
+        //}
+
+        //[KSPAction("resetEng")]
+        //public void resetEng(KSPActionParam param)
+        //{
+        //    foreach (Part p in FlightGlobals.ActiveVessel.parts)
+        //    {
+        //        foreach (ModuleEngines eng in p.Modules.OfType<ModuleEngines>())
+        //        {
+        //            print("res eng");
+        //            eng.manuallyOverridden = false;
+        //        }
+        //    }
+        //}
+        
+        //public void Update()
+        //{
+        //    foreach (Part p in FlightGlobals.ActiveVessel.parts)
+        //    {
+        //        foreach (ModuleEngines eng in p.Modules.OfType<ModuleEngines>())
+        //        {
+        //            print("throttle " + eng.currentThrottle + eng.requestedThrottle);
+                    
+        //        }
+        //    }
+        //}
+
+        //public static List<Part> AGX2VslPartsWithActions(uint flightID, int group)
+        //{
+        //    Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
+        //    List<Part> RetActs = (List<Part>)calledType.InvokeMember("AGX2VslListOfPartsInGroup", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] {flightID, group });
+        //    return RetActs;
+        //}
+        //public static List<PartModule> AGX2VslPartModulesWithActions(uint flightID, int group)
+        //{
+        //    Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
+        //    List<PartModule> RetActs = (List<PartModule>)calledType.InvokeMember("AGX2VslListOfPartModulesInGroup", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] {flightID, group });
+        //    return RetActs;
+        //}
+        
+        //public static List<Part> AGXPartsWithActions(int group)
+        //{
+        //    Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
+        //    List<Part> RetActs = (List<Part>)calledType.InvokeMember("AGXListOfPartsInGroup", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { group });
+        //    return RetActs;
+        //}
+        //public static List<PartModule> AGXPartModulessWithActions(int group)
+        //{
+        //    Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
+        //    List<PartModule> RetActs = (List<PartModule>)calledType.InvokeMember("AGXListOfPartModulesInGroup", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { group });
+        //    return RetActs;
+        //}
+
         [KSPAction("Control From Here")]
         public void ControlFromHere(KSPActionParam param)
         {
