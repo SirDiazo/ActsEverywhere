@@ -38,20 +38,30 @@ namespace ActsEW
     }
     public class ModuleCommandActions : PartModule
     {
-        //[KSPAction("maxEng")]
-        //public void maxEng(KSPActionParam param)
+        //[KSPAction("setLock")]
+        //public void setLock(KSPActionParam param)
         //{
-        //    foreach (Part p in FlightGlobals.ActiveVessel.parts)
+        //    //Debug.Log("lock set? " + ControlLockInstalled());
+        //}
+        //InputLockManager.
+        //public static bool ControlLockInforce()
+        //{
+        //    try //try-catch is required as the below code returns a NullRef if AGX is not present. 
         //    {
-        //        foreach(ModuleEngines eng in p.Modules.OfType<ModuleEngines>())
-        //        {
-        //            print("max eng");
-        //            eng.manuallyOverridden = true;
-        //            eng.currentThrottle = .99f;
-        //            eng.requestedThrottle = .99f;
-        //        }
+        //        Type calledType = Type.GetType("ControlLock.ControlLock, ControlLock");
+        //        return (bool)calledType.InvokeMember("IsLockSet", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, null);
+        //    }
+        //    catch
+        //    {
+        //        return false;
         //    }
         //}
+        //[KSPAction("unsetLock")]
+        //public void unsetLock(KSPActionParam param)
+        //{
+        //    ControlLock.ControlLock.UnsetFullLock("TestLock");
+        //}
+
         //[KSPAction("minEng")]
         //public void minEng(KSPActionParam param)
         //{
@@ -249,76 +259,237 @@ namespace ActsEW
     }
     public class ModuleControlSurfaceActions : PartModule
     {
+        [KSPField(guiName = "NotShown", isPersistant = true, guiActiveEditor = false, guiActive = false)]
+        public float FARpitch = 100f;
+        [KSPField(guiName = "NotShown", isPersistant = true, guiActiveEditor = false, guiActive = false)]
+        public float FARyaw = 100f;
+        [KSPField(guiName = "NotShown", isPersistant = true, guiActiveEditor = false, guiActive = false)]
+        public float FARroll = 100f;
+
         [KSPAction("Toggle Pitch")]
         public void TogglePitchAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignorePitch = !pm.ignorePitch;
+                if(pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    if (param.type == KSPActionType.Activate)
+                    {
+                        CS.ignorePitch = false;
+                    }
+                    else
+                    {
+                        CS.ignorePitch = true;
+                    }
+                }
+                if (pm.moduleName == "FARControllableSurface")
+                {
+                    if ((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                    {
+                        FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                    }
+                    if (param.type == KSPActionType.Activate)
+                    {
+                        pm.Fields.SetValue("pitchaxis", FARpitch);
+                    }
+                    else 
+                    {
+                        pm.Fields.SetValue("pitchaxis", 0f);
+                    }
+                }
             }
         }
         [KSPAction("Enable Pitch")]
         public void EnablePitchAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignorePitch = false;
+                if (pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    CS.ignorePitch = false;
+                }
+                if(pm.moduleName == "FARControllableSurface")
+                {
+                    if((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                    {
+                        FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                    }
+                    pm.Fields.SetValue("pitchaxis", FARpitch);
+                }
             }
+
         }
         [KSPAction("Disable Pitch")]
         public void DisablePitchAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignorePitch = true;
+                if (pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    CS.ignorePitch = true;
+                }
+                if (pm.moduleName == "FARControllableSurface")
+                {
+                    if ((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                    {
+                        FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                    }
+                    pm.Fields.SetValue("pitchaxis", 0f);
+                }
             }
         }
         [KSPAction("Toggle Yaw")]
         public void ToggleYawAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignoreYaw = !pm.ignoreYaw;
+                if (pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    if (param.type == KSPActionType.Activate)
+                    {
+                        CS.ignoreYaw = false;
+                    }
+                    else
+                    {
+                        CS.ignoreYaw = true;
+                    }
+                    if (pm.moduleName == "FARControllableSurface")
+                    {
+                        if ((float)pm.Fields.GetValue("yawaxis") != 0f)
+                        {
+                            FARyaw = (float)pm.Fields.GetValue("yawaxis");
+                        }
+                        if (param.type == KSPActionType.Activate)
+                        {
+                            pm.Fields.SetValue("yawaxis", FARyaw);
+                        }
+                        else
+                        {
+                            pm.Fields.SetValue("yawaxis", 0f);
+                        }
+                    }
+                }
             }
         }
         [KSPAction("Enable Yaw")]
         public void EnableYawAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignoreYaw = false;
+                if (pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    CS.ignoreYaw = false;
+                }
+                if (pm.moduleName == "FARControllableSurface")
+                {
+                    if ((float)pm.Fields.GetValue("yawaxis") != 0f)
+                    {
+                        FARyaw = (float)pm.Fields.GetValue("yawaxis");
+                    }
+                    pm.Fields.SetValue("yawaxis", FARyaw);
+                }
             }
+
         }
         [KSPAction("Disable Yaw")]
         public void DisableYawAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignoreYaw = true;
+                if (pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    CS.ignoreYaw = true;
+                }
+                if (pm.moduleName == "FARControllableSurface")
+                {
+                    if ((float)pm.Fields.GetValue("yawaxis") != 0f)
+                    {
+                        FARyaw = (float)pm.Fields.GetValue("yawaxis");
+                    }
+                    pm.Fields.SetValue("yawaxis", 0f);
+                }
             }
         }
         [KSPAction("Toggle Roll")]
         public void ToggleRollAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignoreRoll = !pm.ignoreRoll;
+                if (pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    if (param.type == KSPActionType.Activate)
+                    {
+                        CS.ignoreRoll = false;
+                    }
+                    else
+                    {
+                        CS.ignoreRoll = true;
+                    }
+                }
+                if (pm.moduleName == "FARControllableSurface")
+                {
+                    if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+                    {
+                        FARroll = (float)pm.Fields.GetValue("rollaxis");
+                    }
+                    if (param.type == KSPActionType.Activate)
+                    {
+                        pm.Fields.SetValue("rollaxis", FARroll);
+                    }
+                    else
+                    {
+                        pm.Fields.SetValue("rollaxis", 0f);
+                    }
+                }
             }
         }
         [KSPAction("Enable Roll")]
         public void EnableRollAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignoreRoll = false;
+                if (pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    CS.ignoreRoll = false;
+                }
+                if (pm.moduleName == "FARControllableSurface")
+                {
+                    if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+                    {
+                        FARroll = (float)pm.Fields.GetValue("rollaxis");
+                    }
+                    pm.Fields.SetValue("rollaxis", FARroll);
+                }
+
             }
         }
         [KSPAction("Disable Roll")]
         public void DisableRollAction(KSPActionParam param)
         {
-            foreach (ModuleControlSurface pm in this.part.Modules.OfType<ModuleControlSurface>())
+            foreach (PartModule pm in this.part.Modules)
             {
-                pm.ignoreRoll = true;
+                if (pm.moduleName == "ModuleControlSurface")
+                {
+                    ModuleControlSurface CS = (ModuleControlSurface)pm;
+                    CS.ignoreRoll = true;
+                }
+                if (pm.moduleName == "FARControllableSurface")
+                {
+                    if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+                    {
+                        FARroll = (float)pm.Fields.GetValue("rollaxis");
+                    }
+                    pm.Fields.SetValue("rollaxis", 0f);
+                }
             }
         } 
     }
@@ -703,5 +874,15 @@ namespace ActsEW
             }
         }
     }
-    
+    public class ModuleScienceLabActions :PartModule
+    {
+        [KSPAction("Clean Experiments")]
+        public void CleanExperiments(KSPActionParam param)
+        {
+            foreach (ModuleScienceLab sciLab in this.part.Modules.OfType<ModuleScienceLab>())
+            {
+                sciLab.CleanModulesEvent();
+            }
+        }
+    }
 }
