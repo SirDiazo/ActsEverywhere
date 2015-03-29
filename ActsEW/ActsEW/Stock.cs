@@ -358,6 +358,7 @@ namespace ActsEW
                     {
                         CS.ignoreYaw = true;
                     }
+                }
                     if (pm.moduleName == "FARControllableSurface")
                     {
                         if ((float)pm.Fields.GetValue("yawaxis") != 0f)
@@ -373,7 +374,7 @@ namespace ActsEW
                             pm.Fields.SetValue("yawaxis", 0f);
                         }
                     }
-                }
+                
             }
         }
         [KSPAction("Enable Yaw")]
