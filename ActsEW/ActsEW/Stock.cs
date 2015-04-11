@@ -8,7 +8,7 @@ using KSP.IO;
 
 namespace ActsEW
 {
-    public class ModuleGimbalActions :PartModule
+    public class ModuleGimbalActions : PartModule
     {
         [KSPAction("Enable Gimbal")]
         public void EnableGimbalAction(KSPActionParam param)
@@ -89,7 +89,7 @@ namespace ActsEW
         //        }
         //    }
         //}
-        
+
         //public void Update()
         //{
         //    foreach (Part p in FlightGlobals.ActiveVessel.parts)
@@ -97,7 +97,7 @@ namespace ActsEW
         //        foreach (ModuleEngines eng in p.Modules.OfType<ModuleEngines>())
         //        {
         //            print("throttle " + eng.currentThrottle + eng.requestedThrottle);
-                    
+
         //        }
         //    }
         //}
@@ -114,7 +114,7 @@ namespace ActsEW
         //    List<PartModule> RetActs = (List<PartModule>)calledType.InvokeMember("AGX2VslListOfPartModulesInGroup", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] {flightID, group });
         //    return RetActs;
         //}
-        
+
         //public static List<Part> AGXPartsWithActions(int group)
         //{
         //    Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
@@ -151,7 +151,7 @@ namespace ActsEW
         [KSPAction("SAS Steady")]
         public void SASSteady(KSPActionParam param)
         {
-            if(this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.StabilityAssist))
+            if (this.part.vessel.Autopilot.CanSetMode(VesselAutopilot.AutopilotMode.StabilityAssist))
             {
                 this.part.vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, true);
                 this.part.vessel.Autopilot.SetMode(VesselAutopilot.AutopilotMode.StabilityAssist);
@@ -266,13 +266,15 @@ namespace ActsEW
         [KSPField(guiName = "NotShown", isPersistant = true, guiActiveEditor = false, guiActive = false)]
         public float FARroll = 100f;
 
+
+
         [KSPAction("Toggle Pitch")]
         public void TogglePitchAction(KSPActionParam param)
         {
-            
+
             foreach (PartModule pm in this.part.Modules)
             {
-                if(pm.moduleName == "ModuleControlSurface")
+                if (pm.moduleName == "ModuleControlSurface")
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     if (param.type == KSPActionType.Activate)
@@ -286,17 +288,25 @@ namespace ActsEW
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
-                    if ((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("pitchaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
-                        FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                        if ((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                        {
+                            FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                        }
+                        if (param.type == KSPActionType.Activate)
+                        {
+                            pm.Fields.SetValue("pitchaxis", FARpitch);
+                        }
+                        else
+                        {
+                            pm.Fields.SetValue("pitchaxis", 0f);
+                        }
                     }
-                    if (param.type == KSPActionType.Activate)
+                    else
                     {
-                        pm.Fields.SetValue("pitchaxis", FARpitch);
-                    }
-                    else 
-                    {
-                        pm.Fields.SetValue("pitchaxis", 0f);
+                        pm.Fields.SetValue("pitchaxis", !(bool)pm.Fields.GetValue("pitchaxis"));
                     }
                 }
             }
@@ -311,13 +321,21 @@ namespace ActsEW
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     CS.ignorePitch = false;
                 }
-                if(pm.moduleName == "FARControllableSurface")
+                if (pm.moduleName == "FARControllableSurface")
                 {
-                    if((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("pitchaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
-                        FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                        if ((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                        {
+                            FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                        }
+                        pm.Fields.SetValue("pitchaxis", FARpitch);
                     }
-                    pm.Fields.SetValue("pitchaxis", FARpitch);
+                    else
+                    {
+                        pm.Fields.SetValue("pitchaxis", true);
+                    }
                 }
             }
 
@@ -332,13 +350,23 @@ namespace ActsEW
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     CS.ignorePitch = true;
                 }
+
                 if (pm.moduleName == "FARControllableSurface")
                 {
-                    if ((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("pitchaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
-                        FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                        if ((float)pm.Fields.GetValue("pitchaxis") != 0f)
+                        {
+                            FARpitch = (float)pm.Fields.GetValue("pitchaxis");
+                        }
+                        pm.Fields.SetValue("pitchaxis", 0f);
                     }
-                    pm.Fields.SetValue("pitchaxis", 0f);
+                    else
+                    {
+                        pm.Fields.SetValue("pitchaxis", false);
+
+                    }
                 }
             }
         }
@@ -359,7 +387,10 @@ namespace ActsEW
                         CS.ignoreYaw = true;
                     }
                 }
-                    if (pm.moduleName == "FARControllableSurface")
+                if (pm.moduleName == "FARControllableSurface")
+                {
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("yawaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
                         if ((float)pm.Fields.GetValue("yawaxis") != 0f)
                         {
@@ -374,7 +405,12 @@ namespace ActsEW
                             pm.Fields.SetValue("yawaxis", 0f);
                         }
                     }
-                
+                    else
+                    {
+                        pm.Fields.SetValue("yawaxis", !(bool)pm.Fields.GetValue("yawaxis"));
+                    }
+                }
+
             }
         }
         [KSPAction("Enable Yaw")]
@@ -389,11 +425,20 @@ namespace ActsEW
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
-                    if ((float)pm.Fields.GetValue("yawaxis") != 0f)
+
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("yawaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
-                        FARyaw = (float)pm.Fields.GetValue("yawaxis");
+                        if ((float)pm.Fields.GetValue("yawaxis") != 0f)
+                        {
+                            FARyaw = (float)pm.Fields.GetValue("yawaxis");
+                        }
+                        pm.Fields.SetValue("yawaxis", FARyaw);
                     }
-                    pm.Fields.SetValue("yawaxis", FARyaw);
+                    else
+                    {
+                        pm.Fields.SetValue("yawaxis", true);
+                    }
                 }
             }
 
@@ -410,11 +455,19 @@ namespace ActsEW
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
-                    if ((float)pm.Fields.GetValue("yawaxis") != 0f)
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("yawaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
-                        FARyaw = (float)pm.Fields.GetValue("yawaxis");
+                        if ((float)pm.Fields.GetValue("yawaxis") != 0f)
+                        {
+                            FARyaw = (float)pm.Fields.GetValue("yawaxis");
+                        }
+                        pm.Fields.SetValue("yawaxis", 0f);
                     }
-                    pm.Fields.SetValue("yawaxis", 0f);
+                    else
+                    {
+                        pm.Fields.SetValue("yawaxis", false);
+                    }
                 }
             }
         }
@@ -437,17 +490,26 @@ namespace ActsEW
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
-                    if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("rollaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
-                        FARroll = (float)pm.Fields.GetValue("rollaxis");
-                    }
-                    if (param.type == KSPActionType.Activate)
-                    {
-                        pm.Fields.SetValue("rollaxis", FARroll);
+                        if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+                        {
+                            FARroll = (float)pm.Fields.GetValue("rollaxis");
+                        }
+                        if (param.type == KSPActionType.Activate)
+                        {
+                            pm.Fields.SetValue("rollaxis", FARroll);
+                        }
+                        else
+                        {
+                            pm.Fields.SetValue("rollaxis", 0f);
+                        }
                     }
                     else
                     {
-                        pm.Fields.SetValue("rollaxis", 0f);
+                        pm.Fields.SetValue("rollaxis", !(bool)pm.Fields.GetValue("rollaxis"));
                     }
                 }
             }
@@ -464,11 +526,20 @@ namespace ActsEW
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
-                    if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("rollaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
-                        FARroll = (float)pm.Fields.GetValue("rollaxis");
+                        if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+                        {
+                            FARroll = (float)pm.Fields.GetValue("rollaxis");
+                        }
+                        pm.Fields.SetValue("rollaxis", FARroll);
                     }
-                    pm.Fields.SetValue("rollaxis", FARroll);
+                    else
+                    {
+                        pm.Fields.SetValue("rollaxis", true);
+                    }
+
                 }
 
             }
@@ -485,14 +556,22 @@ namespace ActsEW
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
-                    if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+                    int i;
+                    if (int.TryParse(pm.Fields.GetValue("rollaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {
-                        FARroll = (float)pm.Fields.GetValue("rollaxis");
+                        if ((float)pm.Fields.GetValue("rollaxis") != 0f)
+                        {
+                            FARroll = (float)pm.Fields.GetValue("rollaxis");
+                        }
+                        pm.Fields.SetValue("rollaxis", 0f);
                     }
-                    pm.Fields.SetValue("rollaxis", 0f);
+                    else
+                    {
+                        pm.Fields.SetValue("rollaxis", false);
+                    }
                 }
             }
-        } 
+        }
     }
     public class ModuleGoEvaActions : PartModule
     {
@@ -501,9 +580,9 @@ namespace ActsEW
         {
             bool kerbalFound = false;
             Kerbal kerbalToEva = null;
-            foreach(InternalSeat iseat in this.part.internalModel.seats)
+            foreach (InternalSeat iseat in this.part.internalModel.seats)
             {
-                if(iseat.taken && !kerbalFound)
+                if (iseat.taken && !kerbalFound)
                 {
                     kerbalToEva = iseat.kerbalRef;
                     kerbalFound = true;
@@ -522,13 +601,13 @@ namespace ActsEW
     }
     public class ModuleFuelCrossfeedActions : PartModule
     {
-        [KSPField(guiActive = false,guiActiveEditor = false,isPersistant = true)]
+        [KSPField(guiActive = false, guiActiveEditor = false, isPersistant = true)]
         public bool setupRun = false;
 
         [KSPField(guiActive = false, guiActiveEditor = false, isPersistant = true)]
         public bool allowCrossfeed = false;
 
-        [KSPEvent(guiActive = true, guiActiveEditor = true,guiName = "Crossfeeding")]
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Crossfeeding")]
         public void ToggleCrossfeedEvent()
         {
             allowCrossfeed = !allowCrossfeed;
@@ -563,7 +642,7 @@ namespace ActsEW
 
         public override void OnStart(StartState state)
         {
-            if(!setupRun)
+            if (!setupRun)
             {
                 DoSetup();
             }
@@ -702,7 +781,7 @@ namespace ActsEW
             {
                 showEC = false;
             }
-            if (this.part.Resources.Contains("ElectricCharge") && this.part.Resources.Count >= 2 || !this.part.Resources.Contains("ElectricCharge") && this.part.Resources.Count >= 1 )
+            if (this.part.Resources.Contains("ElectricCharge") && this.part.Resources.Count >= 2 || !this.part.Resources.Contains("ElectricCharge") && this.part.Resources.Count >= 1)
             {
                 showRes = true;
             }
@@ -712,7 +791,7 @@ namespace ActsEW
             }
             setupRun = true;
             SetResourceFlow();
-            
+
         }
 
         public override void OnStart(StartState state)
@@ -763,79 +842,79 @@ namespace ActsEW
         {
             //print("Check " + showEC + showRes);    
             foreach (PartResource pr in this.part.Resources)
+            {
+                if (pr.resourceName != "ElectricCharge")
                 {
-                    if(pr.resourceName != "ElectricCharge")
-                    {
-                        if(lockResource)
-                        {
-                            pr.flowMode = PartResource.FlowMode.None;
-                        }
-                        else
-                        {
-                            pr.flowMode = PartResource.FlowMode.Both;
-                        }
-                    }
-                    else if(pr.resourceName == "ElectricCharge")
-                    {
-                        if(lockEC)
-                        {
-                            pr.flowMode = PartResource.FlowMode.None;
-                        }
-                        else
-                        {
-                            pr.flowMode = PartResource.FlowMode.Both;
-                        }
-                    }
-                }
-
-                if (showRes)
-                {
-                    this.Actions["ToggleResource"].active = true;
-                    this.Actions["EnableResource"].active = true;
-                    this.Actions["DisableResource"].active = true;
-                    this.Events["ToggleResourceEvent"].active = true;
-                    this.Events["ToggleResourceEvent"].guiActive = true;
                     if (lockResource)
                     {
-                        this.Events["ToggleResourceEvent"].guiName = "Resource Lock: On";
+                        pr.flowMode = PartResource.FlowMode.None;
                     }
                     else
                     {
-                        this.Events["ToggleResourceEvent"].guiName = "Resource Lock: Off";
+                        pr.flowMode = PartResource.FlowMode.Both;
                     }
                 }
-                else
+                else if (pr.resourceName == "ElectricCharge")
                 {
-                    this.Actions["ToggleResource"].active = false;
-                    this.Actions["EnableResource"].active = false;
-                    this.Actions["DisableResource"].active = false;
-                    this.Events["ToggleResourceEvent"].guiActive = false;
-                    this.Events["ToggleResourceEvent"].active = false;
-                }
-                if (showEC)
-                {
-                    this.Actions["ToggleElec"].active = true;
-                    this.Actions["EnableElec"].active = true;
-                    this.Actions["DisableElec"].active = true;
-                    this.Events["ToggleElectricityEvent"].active = true;
-                    this.Events["ToggleElectricityEvent"].guiActive = true;
                     if (lockEC)
                     {
-                        this.Events["ToggleElectricityEvent"].guiName = "Electricity Lock: On";
+                        pr.flowMode = PartResource.FlowMode.None;
                     }
                     else
                     {
-                        this.Events["ToggleElectricityEvent"].guiName = "Electricity Lock: Off";
+                        pr.flowMode = PartResource.FlowMode.Both;
                     }
+                }
+            }
+
+            if (showRes)
+            {
+                this.Actions["ToggleResource"].active = true;
+                this.Actions["EnableResource"].active = true;
+                this.Actions["DisableResource"].active = true;
+                this.Events["ToggleResourceEvent"].active = true;
+                this.Events["ToggleResourceEvent"].guiActive = true;
+                if (lockResource)
+                {
+                    this.Events["ToggleResourceEvent"].guiName = "Resource Lock: On";
                 }
                 else
                 {
-                    this.Actions["ToggleElec"].active = false;
-                    this.Actions["EnableElec"].active = false;
-                    this.Actions["DisableElec"].active = false;
-                    this.Events["ToggleElectricityEvent"].guiActive = false;
-                    this.Events["ToggleElectricityEvent"].active = false;
+                    this.Events["ToggleResourceEvent"].guiName = "Resource Lock: Off";
                 }
+            }
+            else
+            {
+                this.Actions["ToggleResource"].active = false;
+                this.Actions["EnableResource"].active = false;
+                this.Actions["DisableResource"].active = false;
+                this.Events["ToggleResourceEvent"].guiActive = false;
+                this.Events["ToggleResourceEvent"].active = false;
+            }
+            if (showEC)
+            {
+                this.Actions["ToggleElec"].active = true;
+                this.Actions["EnableElec"].active = true;
+                this.Actions["DisableElec"].active = true;
+                this.Events["ToggleElectricityEvent"].active = true;
+                this.Events["ToggleElectricityEvent"].guiActive = true;
+                if (lockEC)
+                {
+                    this.Events["ToggleElectricityEvent"].guiName = "Electricity Lock: On";
+                }
+                else
+                {
+                    this.Events["ToggleElectricityEvent"].guiName = "Electricity Lock: Off";
+                }
+            }
+            else
+            {
+                this.Actions["ToggleElec"].active = false;
+                this.Actions["EnableElec"].active = false;
+                this.Actions["DisableElec"].active = false;
+                this.Events["ToggleElectricityEvent"].guiActive = false;
+                this.Events["ToggleElectricityEvent"].active = false;
+            }
         }
     }
     public class ModuleWheelActions : PartModule
@@ -843,7 +922,7 @@ namespace ActsEW
         [KSPAction("Add/Rem Brakes")]
         public void AddRemBrakes(KSPActionParam param)
         {
-            foreach(ModuleWheel mWheel in this.part.Modules.OfType<ModuleWheel>())
+            foreach (ModuleWheel mWheel in this.part.Modules.OfType<ModuleWheel>())
             {
                 BaseAction whlBrakes = mWheel.Actions.Find(ba => ba.name == "BrakesAction");
                 if ((whlBrakes.actionGroup & KSPActionGroup.Brakes) == KSPActionGroup.Brakes)
@@ -875,7 +954,7 @@ namespace ActsEW
             }
         }
     }
-    public class ModuleScienceLabActions :PartModule
+    public class ModuleScienceLabActions : PartModule
     {
         [KSPAction("Clean Experiments")]
         public void CleanExperiments(KSPActionParam param)
