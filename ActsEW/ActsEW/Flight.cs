@@ -2,6 +2,7 @@
 //using System.Collections.Generic;
 //using System.Linq;
 //using System.Text;
+//using UnityEngine;
 
 //namespace ActsEW
 //{
@@ -10,14 +11,8 @@
 //    {
 //        public void Update()
 //        {
-//            foreach (Part p in FlightGlobals.ActiveVessel.parts)
-//            {
-//                foreach (PartModule pm in p.Modules)
-//                {
-//                    print(p.partName + " " + pm.moduleName);
-
-//                }
-//            }
+//            Debug.Log("Start bool" + FlightGlobals.ActiveVessel.ActionGroups.groups[7] + " " + FlightGlobals.ActiveVessel.ActionGroups.groups[16]);
+            
 
 //        }
 //    }

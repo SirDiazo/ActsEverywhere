@@ -8,26 +8,26 @@ using KSP.IO;
 
 namespace ActsEW
 {
-    public class ModuleGimbalActions : PartModule
-    {
-        [KSPAction("Enable Gimbal")]
-        public void EnableGimbalAction(KSPActionParam param)
-        {
-            foreach (ModuleGimbal pm in this.part.Modules.OfType<ModuleGimbal>())
-            {
-                pm.FreeGimbal();
-            }
-        }
+    //public class ModuleGimbalActions : PartModule
+    //{
+    //    [KSPAction("Enable Gimbal")]
+    //    public void EnableGimbalAction(KSPActionParam param)
+    //    {
+    //        foreach (ModuleGimbal pm in this.part.Modules.OfType<ModuleGimbal>())
+    //        {
+    //            pm.FreeGimbal();
+    //        }
+    //    }
 
-        [KSPAction("Disable Gimbal")]
-        public void DisableGimbalAction(KSPActionParam param)
-        {
-            foreach (ModuleGimbal pm in this.part.Modules.OfType<ModuleGimbal>())
-            {
-                pm.LockGimbal();
-            }
-        }
-    }
+    //    [KSPAction("Disable Gimbal")]
+    //    public void DisableGimbalAction(KSPActionParam param)
+    //    {
+    //        foreach (ModuleGimbal pm in this.part.Modules.OfType<ModuleGimbal>())
+    //        {
+    //            pm.LockGimbal();
+    //        }
+    //    }
+    //}
     public class ModuleDockingNodeActions : PartModule
     {
         [KSPAction("Control From Here")]
@@ -307,6 +307,7 @@ namespace ActsEW
                     else
                     {
                         pm.Fields.SetValue("pitchaxis", !(bool)pm.Fields.GetValue("pitchaxis"));
+                        //print("tog pitch" + pm.part.flightID.ToString());
                     }
                 }
             }
@@ -335,6 +336,7 @@ namespace ActsEW
                     else
                     {
                         pm.Fields.SetValue("pitchaxis", true);
+                        //print("en pitch" + pm.part.flightID.ToString());
                     }
                 }
             }
@@ -365,6 +367,7 @@ namespace ActsEW
                     else
                     {
                         pm.Fields.SetValue("pitchaxis", false);
+                        //print("dis pitch" + pm.part.flightID.ToString());
 
                     }
                 }
