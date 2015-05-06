@@ -11,8 +11,8 @@
 //    {
 //        public void Update()
 //        {
-//            Debug.Log("Start bool" + FlightGlobals.ActiveVessel.ActionGroups.groups[7] + " " + FlightGlobals.ActiveVessel.ActionGroups.groups[16]);
-            
+//            Debug.Log("Stat " + FlightGlobals.ActiveVessel.ActionGroups.groups[7] + " " + FlightGlobals.ActiveVessel.ActionGroups.groups[16]);
+
 
 //        }
 //    }

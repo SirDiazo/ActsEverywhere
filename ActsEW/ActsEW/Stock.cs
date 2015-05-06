@@ -266,7 +266,14 @@ namespace ActsEW
         [KSPField(guiName = "NotShown", isPersistant = true, guiActiveEditor = false, guiActive = false)]
         public float FARroll = 100f;
 
-
+        [KSPAction("test")]
+        public void test(KSPActionParam param)
+        {
+            foreach(PartModule pm in this.part.Modules)
+            {
+                Debug.Log(pm.moduleName);
+            }
+        }
 
         [KSPAction("Toggle Pitch")]
         public void TogglePitchAction(KSPActionParam param)
@@ -274,16 +281,21 @@ namespace ActsEW
 
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                //if (pm.moduleName == "ModuleControlSurface")
+                //if(pm.GetType() == typeof(ModuleControlSurface))
+                if(pm is ModuleControlSurface)
                 {
+                    //Debug.Log("aero surface found");
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     if (param.type == KSPActionType.Activate)
                     {
                         CS.ignorePitch = false;
+                        //Debug.Log("Act pitch");
                     }
                     else
                     {
                         CS.ignorePitch = true;
+                        //Debug.Log("Deact pitch");
                     }
                 }
                 if (pm.moduleName == "FARControllableSurface")
@@ -317,7 +329,7 @@ namespace ActsEW
         {
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                if (pm is ModuleControlSurface)
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     CS.ignorePitch = false;
@@ -347,7 +359,7 @@ namespace ActsEW
         {
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                if (pm is ModuleControlSurface)
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     CS.ignorePitch = true;
@@ -378,7 +390,7 @@ namespace ActsEW
         {
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                if (pm is ModuleControlSurface)
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     if (param.type == KSPActionType.Activate)
@@ -421,7 +433,7 @@ namespace ActsEW
         {
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                if (pm is ModuleControlSurface)
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     CS.ignoreYaw = false;
@@ -451,7 +463,7 @@ namespace ActsEW
         {
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                if (pm is ModuleControlSurface)
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     CS.ignoreYaw = true;
@@ -479,7 +491,7 @@ namespace ActsEW
         {
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                if (pm is ModuleControlSurface)
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     if (param.type == KSPActionType.Activate)
@@ -489,6 +501,18 @@ namespace ActsEW
                     else
                     {
                         CS.ignoreRoll = true;
+                    }
+                }
+                if (pm is ModuleAeroSurface)
+                {
+                    ModuleAeroSurface AS = (ModuleAeroSurface)pm;
+                    if (param.type == KSPActionType.Activate)
+                    {
+                        AS.ignoreRoll = false;
+                    }
+                    else
+                    {
+                        AS.ignoreRoll = true;
                     }
                 }
                 if (pm.moduleName == "FARControllableSurface")
@@ -522,10 +546,15 @@ namespace ActsEW
         {
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                if (pm is ModuleControlSurface)
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     CS.ignoreRoll = false;
+                }
+                if (pm is ModuleAeroSurface)
+                {
+                    ModuleAeroSurface AS = (ModuleAeroSurface)pm;
+                    AS.ignoreRoll = false;
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
@@ -552,10 +581,15 @@ namespace ActsEW
         {
             foreach (PartModule pm in this.part.Modules)
             {
-                if (pm.moduleName == "ModuleControlSurface")
+                if (pm is ModuleControlSurface)
                 {
                     ModuleControlSurface CS = (ModuleControlSurface)pm;
                     CS.ignoreRoll = true;
+                }
+                if (pm is ModuleAeroSurface)
+                {
+                    ModuleAeroSurface AS = (ModuleAeroSurface)pm;
+                    AS.ignoreRoll = true;
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
