@@ -266,14 +266,14 @@ namespace ActsEW
         [KSPField(guiName = "NotShown", isPersistant = true, guiActiveEditor = false, guiActive = false)]
         public float FARroll = 100f;
 
-        [KSPAction("test")]
-        public void test(KSPActionParam param)
-        {
-            foreach(PartModule pm in this.part.Modules)
-            {
-                Debug.Log(pm.moduleName);
-            }
-        }
+        //[KSPAction("test")]
+        //public void test(KSPActionParam param)
+        //{
+        //    foreach (PartModule pm in this.part.Modules)
+        //    {
+        //        Debug.Log(pm.moduleName);
+        //    }
+        //}
 
         [KSPAction("Toggle Pitch")]
         public void TogglePitchAction(KSPActionParam param)
@@ -300,6 +300,14 @@ namespace ActsEW
                 }
                 if (pm.moduleName == "FARControllableSurface")
                 {
+                    if(param.type == KSPActionType.Activate)
+                    {
+                        Debug.Log("Activate " + !(param.type > 0));
+                    }
+                    else if (param.type == KSPActionType.Deactivate)
+                    {
+                        Debug.Log("Deactivate " + !(param.type > 0));
+                    }
                     int i;
                     if (int.TryParse(pm.Fields.GetValue("pitchaxis").ToString(), out i)) //true if FAR installed, false if NEAR installed
                     {

@@ -6,14 +6,18 @@
 
 //namespace ActsEW
 //{
-//    [KSPAddon(KSPAddon.Startup.Flight, false)]
+//    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
 //    public class AGXFlight : PartModule
 //    {
 //        public void Update()
 //        {
-//            Debug.Log("Stat " + FlightGlobals.ActiveVessel.ActionGroups.groups[7] + " " + FlightGlobals.ActiveVessel.ActionGroups.groups[16]);
+//            foreach (Part p in FlightGlobals.ActiveVessel.parts)
+//            {
+//                foreach(PartModule.pm)
+//                Debug.Log(GameDatabase.Instance.GetConfigNode("KIS/settings/KISConfig"));
 
-
+//            }
+//        }
 //        }
 //    }
 //}
